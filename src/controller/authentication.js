@@ -3,7 +3,8 @@ const { comparePassword, hashPassword } = require('../utils/utils');
 const jwt = require('jsonwebtoken');
 const { generateJwtToken } = require('../service/jwt.service');
 const UserSession = require('../model/UserSession');
-const { configuration } = require('../config/config')
+const { configuration } = require('../config/config');
+const { getUserLocation } = require('../service/location.service');
 
 exports.register = async (request, response) => {
     try {
@@ -128,7 +129,11 @@ exports.login = async (request, response) => {
     try {
 
         const { email, password, deviceDetails } = request.body;
-        const userIp = deviceDetails.ipAddress || request.socket.remoteAddress
+        const userIp = deviceDetails.ipAddress || request.socket.remoteAddress;
+
+        // find user location...
+        const location = await getUserLocation(userIp);
+        console.log("location", location);
 
 
         // check user alredy exist or not...
@@ -190,7 +195,8 @@ exports.login = async (request, response) => {
         return response.status(200).json({
             success: true,
             message: "Login Successfully",
-            accessToken
+            accessToken,
+            userLocation: location
         })
 
     } catch (error) {

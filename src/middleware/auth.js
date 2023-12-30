@@ -41,6 +41,8 @@ exports.auth = async (request, response, next) => {
         }
 
 
+
+
         request.user = { _id: user._id, email: user.email };
         next()
 
