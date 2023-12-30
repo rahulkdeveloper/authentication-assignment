@@ -129,7 +129,7 @@ exports.login = async (request, response) => {
     try {
 
         const { email, password, deviceDetails } = request.body;
-        const userIp = deviceDetails.ipAddress || request.socket.remoteAddress;
+        const userIp = deviceDetails.ipAddress || request.socket.remoteAddress || request.ip;
 
         // find user location...
         const location = await getUserLocation(userIp);
