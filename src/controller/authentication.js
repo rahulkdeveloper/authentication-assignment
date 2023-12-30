@@ -266,6 +266,9 @@ exports.resetPassword = async (request, response) => {
         //update new password
         await User.findOneAndUpdate({ _id: user._id }, { password: newHashPassword, forgotPasswordOtp: null })
 
+        // logout from other device ...
+        await UserSession.findOneAndDelete({ userId: user._id });
+
         return response.status(200).json({
             success: true,
             message: "Password reset successfully.",
