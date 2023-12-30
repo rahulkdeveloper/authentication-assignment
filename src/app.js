@@ -15,9 +15,18 @@ app.get('/', async (request, response) => {
 
 const authRouter = require('./router/authentication');
 const userRouter = require('./router/user');
+const multer = require("multer");
 
 app.use("/api/authentication", authRouter);
 app.use("/api/user", userRouter);
+
+app.use((err, request, response, next) => {
+    console.log("err", err);
+    return response.status(400).json({
+        success: false,
+        message: err.message
+    })
+})
 
 
 app.listen(port, () => {

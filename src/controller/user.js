@@ -7,6 +7,13 @@ exports.uploadProfileImage = async (request, response) => {
     try {
         const userId = request.user._id
 
+        if (!request.file) {
+            return response.status(400).json({
+                success: false,
+                message: "Please upload image."
+            })
+        }
+
         const imageBuffer = request.file.buffer;
         const base64Image = imageBuffer.toString('base64');
 
